@@ -29,6 +29,10 @@ def register():
         cur.close()
         conn.close()
 
+        return redirect("/login").  #fortsatt i if-blokken
+
+    return render_template("register.html", form=form) #utenfor if-blokken
+
 
 
     return render_template("register.html", form=form)
