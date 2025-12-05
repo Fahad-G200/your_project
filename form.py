@@ -16,3 +16,6 @@ def handle_form(form):
         brukernavn = form.username.data
         passord = form.password.data
 
+    if form.validate_on_submit():
+        brukernavn = form.username.data
+        passord = form.password.data
