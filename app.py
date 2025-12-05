@@ -19,6 +19,17 @@ def get_conn():
 def register():
     form = RegisterForm()
 
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "INSERT INTO kunder (navn, brukernavn, passord) VALUES (%s, %s, %s)",
+            (navn, brukernavn, passord)
+        )
+        conn.commit()
+        cur.close()
+        conn.close()
+
+
 
     return render_template("register.html", form=form)
 
