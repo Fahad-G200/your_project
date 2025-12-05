@@ -18,7 +18,12 @@ def get_conn():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
-
+    
+    if form.validate_on_submit():
+        navn = form.navn.data
+        brukernavn = form.brukernavn.data
+        passord = form.passord.data
+        
         conn = get_conn()
         cur = conn.cursor()
         cur.execute(
@@ -29,11 +34,13 @@ def register():
         cur.close()
         conn.close()
 
-        return redirect("/login").  #fortsatt i if-blokken
+        return redirect("/login")
 
-    return render_template("register.html", form=form) #utenfor if-blokken
+    return render_template("register.html", form=form)
 
-
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    form = LoginForm()
 
     return render_template("register.html", form=form)
 
