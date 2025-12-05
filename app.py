@@ -43,5 +43,22 @@ def register():
 def login():
     form = LoginForm()
 
-    return render_template("register.html", form=form)
+    if form.validate_on_submit():
+        brukernavn = form.brukernavn.data
+        passord = form.passord.data
+
+        conn = get_conn()
+        cur = conn.cursor()
+        cur.execute(
+            "SELECT navn FROM kunder WHERE brukernavn=%s AND passord=%s",
+            (brukernavn, passord)
+        )
+        user = cur.fetchone() #Husker å lagre svar fra databasen i variabel user!
+        cur.close()
+        conn.close()
+
+        if user:
+            return redirect("/")  # Redirect to home or dashboard
+
+    return render_template("login.html", form=form)
 
