@@ -3,7 +3,7 @@ import mysql.connector
 from forms import RegisterForm, LoginForm
 
 app = Flask(__name__)
-app.config["SECRET_KEY"] = "hemmelig-nok"  # samme som app.secret_key
+app.config["SECRET_KEY"] = "hemmelig-nok"
 
 def get_conn():
     return mysql.connector.connect(
