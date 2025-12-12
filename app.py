@@ -1,6 +1,6 @@
 from flask import Flask, render_template, redirect
 import mysql.connector
-from forms import RegisterForm, LoginForm   # ← VIKTIG ENDRING
+from forms import RegisterForm, LoginForm
 
 app = Flask(__name__)
 app.secret_key = "hemmelig-nok"
@@ -9,8 +9,8 @@ app.secret_key = "hemmelig-nok"
 def get_conn():
     return mysql.connector.connect(
         host="localhost",
-        user="kantineuser",
-        password="passord123",
+        user="fahad",
+        password="Fahad2008",
         database="kantine"
     )
 
@@ -20,7 +20,7 @@ def register():
     form = RegisterForm()
 
     if form.validate_on_submit():
-        navn = form.name.data          # ← ENDRET
+        navn = form.name.data
         brukernavn = form.username.data
         passord = form.password.data
 
@@ -44,7 +44,7 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        brukernavn = form.username.data   # ← ENDRET
+        brukernavn = form.username.data
         passord = form.password.data
 
         conn = get_conn()
@@ -63,6 +63,3 @@ def login():
             form.username.errors.append("Feil brukernavn eller passord")
 
     return render_template("login.html", form=form)
-
-if __name__ == "__main__":
-    app.run(debug=True)
