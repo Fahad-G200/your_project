@@ -1,6 +1,6 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, redirect
 import mysql.connector
-from form import RegisterForm, LoginForm   
+from forms import RegisterForm, LoginForm   # ← VIKTIG ENDRING
 
 app = Flask(__name__)
 app.secret_key = "hemmelig-nok"
@@ -18,12 +18,12 @@ def get_conn():
 @app.route("/register", methods=["GET", "POST"])
 def register():
     form = RegisterForm()
-    
+
     if form.validate_on_submit():
-        navn = form.navn.data
-        brukernavn = form.brukernavn.data
-        passord = form.passord.data
-        
+        navn = form.name.data          # ← ENDRET
+        brukernavn = form.username.data
+        passord = form.password.data
+
         conn = get_conn()
         cur = conn.cursor()
         cur.execute(
@@ -44,8 +44,8 @@ def login():
     form = LoginForm()
 
     if form.validate_on_submit():
-        brukernavn = form.brukernavn.data
-        passord = form.passord.data
+        brukernavn = form.username.data   # ← ENDRET
+        passord = form.password.data
 
         conn = get_conn()
         cur = conn.cursor()
@@ -53,12 +53,13 @@ def login():
             "SELECT navn FROM kunder WHERE brukernavn=%s AND passord=%s",
             (brukernavn, passord)
         )
-        user = cur.fetchone() #Husker å lagre svar fra databasen i variabel user!
+        user = cur.fetchone()
         cur.close()
         conn.close()
 
         if user:
-            return redirect("/")  # Redirect to home or dashboard
+            return render_template("welcome.html", name=user[0])
+        else:
+            form.username.errors.append("Feil brukernavn eller passord")
 
     return render_template("login.html", form=form)
-
